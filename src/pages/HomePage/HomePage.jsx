@@ -36,11 +36,13 @@ const HomePage = () => {
         </Grid>
 
         {/* HomeRight Section */}
-        <Grid item xs={12} lg={3}>
-          <div className="sticky top-0 w-full">
-            <HomeRight />
-          </div>
-        </Grid>
+        {location.pathname === "/" && (
+          <Grid item xs={12} lg={3}>
+            <div className="sticky top-0 w-full">
+              <HomeRight />
+            </div>
+          </Grid>
+        )}
       </Grid>
     </div>
   );
