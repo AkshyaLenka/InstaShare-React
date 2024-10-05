@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import * as Yup from "yup";
 import { loginUserAction } from "../../Redux/Auth/auth.action";
+import { useNavigate } from "react-router-dom";
 
 const initialValues = { email: "", password: "" };
 const validationSchema = {
@@ -15,6 +16,7 @@ const validationSchema = {
 const Login = () => {
   const [formValue, setFormValue] = useState();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const handleSubmit = (values) => {
     console.log("Handle Submit", values);
     dispatch(loginUserAction({ data: values }));
@@ -70,6 +72,10 @@ const Login = () => {
           </Button>
         </Form>
       </Formik>
+      <div className="flex gap-0 items-center justify-center pt-5">
+        <p>New User?</p>
+        <Button onClick={() => navigate("/register")}>Register</Button>
+      </div>
     </>
   );
 };
