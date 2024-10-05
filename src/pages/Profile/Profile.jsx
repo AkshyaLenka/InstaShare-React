@@ -2,6 +2,8 @@ import { Avatar, Box, Button, Card, Tab, Tabs } from "@mui/material";
 import React from "react";
 import { useParams } from "react-router-dom";
 import PostCard from "../../components/Post/PostCard";
+import Reels from "../../components/Reels/Reels";
+import UserReelCard from "../../components/Reels/UserReelCard";
 
 const tabs = [
   { value: "post", name: "Post" },
@@ -10,6 +12,8 @@ const tabs = [
   { value: "repost", name: "RePost" },
 ];
 const posts = [1, 1, 1, 1];
+const reels = [1, 1, 1, 1];
+const savedPost = [1, 1, 1, 1];
 const Profile = () => {
   const { id } = useParams();
   const [value, setValue] = React.useState("post");
@@ -78,8 +82,22 @@ const Profile = () => {
                   </div>
                 ))}
               </div>
+            ) : value === "reels" ? (
+              <div className="flex justify-center flex-wrap gap-2 my-10">
+                {reels.map((item) => (
+                  <UserReelCard />
+                ))}
+              </div>
+            ) : value === "saved" ? (
+              <div className="space-y-5 w-[70%] my-10">
+                {savedPost.map((item) => (
+                  <div className="border border-slate-100 rounded-md">
+                    <PostCard />
+                  </div>
+                ))}
+              </div>
             ) : (
-              <div></div>
+              <div>Repost</div>
             )}
           </div>
         </section>
