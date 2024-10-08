@@ -1,5 +1,4 @@
 import Grid from "@mui/material/Grid";
-import React from "react";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import { Routes, useLocation, Route } from "react-router-dom";
 import MiddlePart from "../../components/MiddlePart/MiddlePart";
@@ -10,6 +9,7 @@ import HomeRight from "../../components/HomeRight/HomeRight";
 
 const HomePage = () => {
   const location = useLocation();
+
   return (
     <div className="px-20">
       <Grid container spacing={0}>
