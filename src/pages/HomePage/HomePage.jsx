@@ -6,9 +6,17 @@ import CreateReelsForm from "../../components/Reels/CreateReelsForm";
 import Reels from "../../components/Reels/Reels";
 import Profile from "../Profile/Profile";
 import HomeRight from "../../components/HomeRight/HomeRight";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { getProfileAction } from "../../Redux/Auth/auth.action";
 
 const HomePage = () => {
+  const dispatch = useDispatch();
   const location = useLocation();
+  const jwt = localStorage.getItem("jwt");
+  const { auth } = useSelector((store) => store);
+
+  console.log("auth ", auth);
 
   return (
     <div className="px-20">

@@ -56,20 +56,29 @@ export const getProfileAction = (jwt) => async (dispatch) => {
     });
 
     console.log("profile----", data);
-    dispatch({ type: GET_PROFILE_SUCCESS, payload: data.jwt });
+    dispatch({ type: GET_PROFILE_SUCCESS, payload: data });
   } catch (error) {
     console.log("-------", error);
     dispatch({ type: GET_PROFILE_FAILURE, payload: error });
   }
 };
 
-export const updateProfileAction = (reqData) => async (dispatch) => {
+export const updateProfileAction = (reqData) => async (dispatch, getState) => {
   dispatch({ type: UPDATE_PROFILE_REQUEST });
+
+  // Get the JWT token from localStorage or from the Redux store (if you store it in state after login)
+  const token = localStorage.getItem("jwt") || getState().auth.token;
+
   try {
-    const { data } = await api.post(`${API_BASE_URL}/api/users`, reqData);
+    const { data } = await axios.put(`${API_BASE_URL}/api/users`, reqData, {
+      headers: {
+        Authorization: `Bearer ${token}`, // Include the JWT token
+        "Content-Type": "application/json", // Ensure the content type is set to JSON
+      },
+    });
 
     console.log("Update profile----", data);
-    dispatch({ type: UPDATE_PROFILE_SUCCESS, payload: data.jwt });
+    dispatch({ type: UPDATE_PROFILE_SUCCESS, payload: data });
   } catch (error) {
     console.log("-------", error);
     dispatch({ type: UPDATE_PROFILE_FAILURE, payload: error });
