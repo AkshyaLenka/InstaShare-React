@@ -13,6 +13,8 @@ import ImageIcon from "@mui/icons-material/Image";
 import VideoCallIcon from "@mui/icons-material/VideoCall";
 import React, { useState } from "react";
 import { uploadToCloudinary } from "../../utils/uploadToCloudinary";
+import { useDispatch } from "react-redux";
+import { createPostAction } from "../../Redux/Post/post.Action";
 
 const style = {
   position: "absolute",
@@ -31,6 +33,8 @@ const CreatePostModal = ({ handleClose, open }) => {
   const [selectedImage, setSelectedImage] = useState();
   const [selectedVideo, setSelectedVideo] = useState();
   const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
+
   const handleSelectImage = async (event) => {
     setIsLoading(true);
     const imageUrl = await uploadToCloudinary(event.target.files[0], "image");
@@ -38,7 +42,14 @@ const CreatePostModal = ({ handleClose, open }) => {
     setIsLoading(false);
     formik.setFieldValue("image", imageUrl);
   };
-  const handleSelectVideo = () => {};
+
+  const handleSelectVideo = async (event) => {
+    setIsLoading(true);
+    const videoUrl = await uploadToCloudinary(event.target.files[0], "video");
+    setSelectedVideo(videoUrl);
+    setIsLoading(false);
+    formik.setFieldValue("video", videoUrl);
+  };
   const formik = useFormik({
     initialValues: {
       caption: "",
@@ -47,6 +58,7 @@ const CreatePostModal = ({ handleClose, open }) => {
     },
     onSubmit: (values) => {
       console.log("Formik values: ", values);
+      dispatch(createPostAction(values));
     },
   });
   return (
@@ -84,7 +96,7 @@ const CreatePostModal = ({ handleClose, open }) => {
                   id="image-input"
                 />
                 <label htmlFor="image-input">
-                  <IconButton color="primary">
+                  <IconButton color="primary" component="span">
                     <ImageIcon />
                   </IconButton>
                 </label>

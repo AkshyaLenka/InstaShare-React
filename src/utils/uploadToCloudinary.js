@@ -5,11 +5,11 @@ export const uploadToCloudinary = async (pics, fileType) => {
   if (pics && fileType) {
     const data = new FormData();
     data.append("file", pics);
-    data.append("uload_preset", upload_preset);
+    data.append("upload_preset", upload_preset);
     data.append("cloud_name", cloud_name);
 
     const res = await fetch(
-      `POST https://api.cloudinary.com/v1_1/${cloud_name}/${fileType}/upload`,
+      `https://api.cloudinary.com/v1_1/${cloud_name}/${fileType}/upload`,
       { method: "post", body: data }
     );
 
