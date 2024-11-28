@@ -5,6 +5,7 @@ import {
   CardContent,
   CardHeader,
   CardMedia,
+  Divider,
   IconButton,
   Typography,
 } from "@mui/material";
@@ -17,10 +18,25 @@ import BookmarkIcon from "@mui/icons-material/Bookmark";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { red } from "@mui/material/colors";
-import React from "react";
+import React, { useState } from "react";
 import { BookmarkAdd, ExpandMore } from "@mui/icons-material";
+import { useDispatch } from "react-redux";
+import { createCommentAction } from "../../Redux/Post/post.Action";
 
-const PostCard = () => {
+const PostCard = ({ item }) => {
+  const [showComments, setShowComments] = useState(false);
+  const dispatch = useDispatch();
+  const handleShowComment = () => setShowComments(!showComments);
+  const handleCreateComment = (content) => {
+    const reqData = {
+      postId: item.id,
+      data: {
+        content,
+      },
+    };
+    dispatch(createCommentAction(reqData));
+  };
+
   return (
     <Card className="">
       <CardHeader
@@ -34,18 +50,23 @@ const PostCard = () => {
             <MoreVertIcon />
           </IconButton>
         }
-        title="Fine, Whatever."
-        subheader="@Akshya"
+        title={item.user.firstName + " " + item.user.lastname}
+        subheader={
+          "@" +
+          item.user.firstName.toLowerCase() +
+          "_" +
+          item.user.lastname.toLowerCase()
+        }
       />
       <CardMedia
         component="img"
         height="194"
-        image="https://cdn.pixabay.com/photo/2023/04/24/14/23/kai-hiwatari-7948233_1280.png"
+        image={item.image}
         alt="Kai Hiwatari"
       />
       <CardContent>
         <Typography variant="body2" sx={{ color: "text.secondary" }}>
-          What a surprise,I won
+          {item.caption}
         </Typography>
       </CardContent>
       <CardActions className="flex justify-between" disableSpacing>
@@ -56,7 +77,9 @@ const PostCard = () => {
           <IconButton>
             <ShareIcon />
           </IconButton>
-          <IconButton>{<ChatBubbleIcon />}</IconButton>
+          <IconButton onClick={handleShowComment}>
+            {<ChatBubbleIcon />}
+          </IconButton>
         </div>
         <div>
           <IconButton>
@@ -64,6 +87,36 @@ const PostCard = () => {
           </IconButton>
         </div>
       </CardActions>
+
+      {showComments && (
+        <section>
+          <div className="flex items-center space-x-5 mx-3 my-5">
+            <Avatar sx={{}} />
+            <input
+              onKeyPress={(e) => {
+                if (e.key == "Enter") {
+                  handleCreateComment(e.target.value);
+                  console.log("Enter Pressed-----", e.target.value);
+                }
+              }}
+              className="w-full outline-none bg-transparent border border-[#3b4054] rounded-full px-5 py-2"
+              type="text"
+              placeholder="Add a comment..."
+            />
+          </div>
+          <Divider />
+          <div className="mx-3 space-y-2 my-5 text-xs">
+            <div className="flex justify-between items-center">
+              <div className="flex items-center space-x-5">
+                <Avatar
+                  sx={{ height: "2rem", width: "2rem", fontSize: ".8" }}
+                ></Avatar>
+                <p>nice image</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
     </Card>
   );
 };
