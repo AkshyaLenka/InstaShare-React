@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 
 const initialValues = {
   firstName: "",
-  lastName: "",
+  lastname: "",
   gender: "",
   email: "",
   password: "",
@@ -64,14 +64,14 @@ const Register = () => {
             <div>
               <Field
                 as={TextField}
-                name="lastName"
+                name="lastname"
                 placeholder="Last Name"
                 type="text"
                 variant="outlined"
                 fullWidth
               />
               <ErrorMessage
-                name="lastName"
+                name="lastname"
                 component={"div"}
                 className="text-red-500"
               />

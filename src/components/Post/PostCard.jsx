@@ -20,12 +20,17 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { red } from "@mui/material/colors";
 import React, { useState } from "react";
 import { BookmarkAdd, ExpandMore } from "@mui/icons-material";
-import { useDispatch } from "react-redux";
-import { createCommentAction } from "../../Redux/Post/post.Action";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  createCommentAction,
+  likePostAction,
+} from "../../Redux/Post/post.Action";
+import { isLikedByReqUser } from "../../utils/isLikedByReqUser";
 
 const PostCard = ({ item }) => {
   const [showComments, setShowComments] = useState(false);
   const dispatch = useDispatch();
+  const { post, auth } = useSelector((store) => store);
   const handleShowComment = () => setShowComments(!showComments);
   const handleCreateComment = (content) => {
     const reqData = {
@@ -35,6 +40,10 @@ const PostCard = ({ item }) => {
       },
     };
     dispatch(createCommentAction(reqData));
+  };
+
+  const handleLikePost = () => {
+    dispatch(likePostAction(item.id));
   };
 
   return (
@@ -58,11 +67,16 @@ const PostCard = ({ item }) => {
           item.user.lastname.toLowerCase()
         }
       />
-      <CardMedia
+      {/* <CardMedia
         component="img"
-        height="194"
+        height="100"
         image={item.image}
         alt="Kai Hiwatari"
+      /> */}
+      <img
+        className="w-full max-h-[30rem] object-cover object-top"
+        src={item.image}
+        alt=""
       />
       <CardContent>
         <Typography variant="body2" sx={{ color: "text.secondary" }}>
@@ -71,8 +85,12 @@ const PostCard = ({ item }) => {
       </CardContent>
       <CardActions className="flex justify-between" disableSpacing>
         <div>
-          <IconButton>
-            {true ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+          <IconButton onClick={handleLikePost}>
+            {isLikedByReqUser(auth.user.id, item) ? (
+              <FavoriteIcon />
+            ) : (
+              <FavoriteBorderIcon />
+            )}
           </IconButton>
           <IconButton>
             <ShareIcon />
@@ -106,14 +124,16 @@ const PostCard = ({ item }) => {
           </div>
           <Divider />
           <div className="mx-3 space-y-2 my-5 text-xs">
-            <div className="flex justify-between items-center">
+            {item.comments?.map((comment) => (
               <div className="flex items-center space-x-5">
                 <Avatar
-                  sx={{ height: "2rem", width: "2rem", fontSize: ".8" }}
-                ></Avatar>
-                <p>nice image</p>
+                  sx={{ height: "2rem", width: "2rem", fontSize: ".8rem" }}
+                >
+                  {comment.user.firstName[0]}
+                </Avatar>
+                <p>{comment.content}</p>
               </div>
-            </div>
+            ))}
           </div>
         </section>
       )}
