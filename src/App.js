@@ -6,6 +6,8 @@ import Message from "./pages/Message/Message";
 import { useDispatch, useSelector } from "react-redux";
 import { getProfileAction } from "./Redux/Auth/auth.action";
 import { useEffect } from "react";
+import { ThemeProvider } from "@mui/material";
+import { darkTheme } from "./Theme/DarkTheme";
 
 function App() {
   const { auth } = useSelector((store) => store);
@@ -17,7 +19,7 @@ function App() {
   }, [jwt]);
 
   return (
-    <div className="">
+    <ThemeProvider theme={darkTheme}>
       <Routes>
         <Route
           path="/*"
@@ -28,7 +30,7 @@ function App() {
         {/* <Route path="/login" element={<Authentication />} /> */}
         {/* <Route path="/register" element={<Authentication />} /> */}
       </Routes>
-    </div>
+    </ThemeProvider>
   );
 }
 
